@@ -1,0 +1,13 @@
+streamlit
+numpy
+pandas
+seaborn
+matplotlib
+plotly
+wordcloud
+nltk
+spacy
+joblib
+pickle5
+streamlit-chat
+# gaianet-sdk
