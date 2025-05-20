@@ -2,24 +2,35 @@
 import streamlit as st
 
 def about_page():
-    st.title("About This Application")
-    st.write("""
-    Welcome to the Quotes Bot application! This app is designed to provide users with inspirational quotes and facilitate engaging conversations through a chatbot interface.
-
-    ### Objectives:
-    - **Curate Inspirational Quotes:** We have gathered a diverse collection of quotes from various sources to inspire and motivate users.
-    - **Interactive Chatbot:** The chatbot allows users to interact and receive quotes based on their queries, enhancing user experience.
-    - **Advanced AI Integration:** Our application utilizes advanced AI models for improved response generation, ensuring relevant and meaningful interactions.
-
-    ### Features:
-    - **Quote Retrieval:** Users can request quotes on specific topics or simply ask for a random quote.
-    - **Chatbot Interaction:** Engage in conversations with the chatbot, which is designed to understand and respond to user inputs effectively.
-    - **Data Visualization:** The app includes visualizations to analyze quote data, providing insights into sentiment and author contributions.
-
-    ### Technologies Used:
-    - **Streamlit:** For building the web application interface.
-    - **Natural Language Processing:** To process and understand user inputs.
-    - **Machine Learning Models:** For generating responses and retrieving relevant quotes.
-
-    Thank you for using the Quotes Bot application! We hope it brings you daily inspiration and motivation.
+    st.title("About Motivate Me 💡")
+    
+    st.markdown("""
+    ## Our Mission
+    
+    At Motivate Me, we believe in the power of words to transform lives. Our platform is designed to provide:
+    
+    - **Personalized Inspiration**: Tailored quotes that resonate with your current situation
+    - **AI-Powered Interactions**: Advanced chatbot technology for meaningful conversations
+    - **Community Growth**: A space for sharing and discovering motivational content
+    
+    ## Technology Stack
+    
+    Our application leverages cutting-edge technologies:
+    - Streamlit for the user interface
+    - Advanced NLP models for quote recommendations
+    - RAG (Retrieval Augmented Generation) for enhanced responses
+    
+    ## The Team
+    
+    Created by passionate individuals who believe in making motivation accessible to everyone.
+    
+    ## Contact Us
+    
+    Have questions or suggestions? Reach out to us:
+    - Email: [contact@motivateme.com](mailto:contact@motivateme.com)
+    - GitHub: [Motivate_Me Repository](https://github.com/I-Macharia/Motivate_Me)
     """)
+    
+    # Add version information
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("v1.0.0")

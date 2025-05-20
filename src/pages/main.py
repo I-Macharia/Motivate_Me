@@ -3,15 +3,30 @@
 import streamlit as st
 
 def main_page():
-    st.title("Welcome to the Quotes App")
-    st.write("""
-    This application allows you to interact with a chatbot that provides quotes and information.
+    st.title("Welcome to Motivate Me! 🚀")
     
-    Use the sidebar to navigate to different functionalities:
-    - **Chatbot**: Interact with a basic chatbot.
-    - **Advanced Chatbot**: Engage with an advanced chatbot using retrieval-augmented generation (RAG).
-    - **About**: Learn more about the application and its purpose.
+    # Add a subtitle/description
+    st.markdown("""
+    ### Your daily dose of inspiration, powered by words that move you.
+    
+    This platform helps you:
+    - Find motivational quotes tailored to your mood
+    - Engage with an AI-powered chatbot for personalized inspiration
+    - Explore a curated collection of uplifting content
     """)
+    
+    # Placeholder for pitch deck (to be added later)
+    st.subheader("Our Vision")
+    st.markdown("""
+    *Pitch deck will be embedded here*
+    
+    For now, you can:
+    - Try our **Chat** feature for quick quotes
+    - Explore our **Advanced Chat** for deeper conversations
+    - Learn more about us in the **About** section
+    """)
+    
+    # Add some interactive elements
+    if st.button("Get Started"):
+        st.markdown("Navigate to the **Chat** section using the sidebar to begin your journey! ➡️")
 
-if __name__ == "__main__":
-    main_page()
