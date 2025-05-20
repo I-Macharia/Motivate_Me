@@ -15,19 +15,24 @@ st.set_page_config(
 # Add custom CSS
 st.markdown("""
     <style>
-    .main {
-        padding: 2rem;
-    }
-    .stButton>button {
-        width: 100%;
-    }
-    .stTitle {
-        text-align: center;
-    }
+    .main { padding: 2rem; }
+    .stButton>button { width: 100%; }
+    .stTitle { text-align: center; }
+    .stRadio > label { font-size: 1.2rem; padding: 1rem 0; }
     </style>
     """, unsafe_allow_html=True)
 
-# Create navigation
+# Sidebar navigation with custom styling
+st.sidebar.title("Navigation 🧭")
+
+# Single navigation control with label
+selection = st.sidebar.radio(
+    label="Choose a page",
+    options=["Home", "Chat", "Advanced Chat", "About"],
+    label_visibility="collapsed"
+)
+
+# Create page mapping
 pages = {
     "Home": main_page,
     "Chat": chatbot_page,
@@ -35,13 +40,10 @@ pages = {
     "About": about_page
 }
 
-# Sidebar navigation with custom styling
-st.sidebar.title("Navigation 🧭")
-selection = st.sidebar.radio("", list(pages.keys()))
-
 # Display selected page
 pages[selection]()
 
 # Add footer
 st.sidebar.markdown("---")
+st.sidebar.markdown("v1.0.0")
 st.sidebar.markdown("Made with ❤️ by Bobby")

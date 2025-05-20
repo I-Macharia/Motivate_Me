@@ -15,18 +15,30 @@ def main_page():
     - Explore a curated collection of uplifting content
     """)
     
-    # Placeholder for pitch deck (to be added later)
-    st.subheader("Our Vision")
+    # Embed Gamma presentation
+    st.markdown("## Our Vision")
+    
+    # Embed the presentation with custom HTML and CSS for responsive design
     st.markdown("""
-    *Pitch deck will be embedded here*
+        <div style="display: flex; justify-content: center; margin: 2rem 0;">
+            <iframe 
+                src="https://gamma.app/embed/7o9jimawz7eeton" 
+                style="width: 700px; max-width: 100%; height: 450px; border: none; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" 
+                allow="fullscreen" 
+                title="Motivate Me 🚀">
+            </iframe>
+        </div>
+    """, unsafe_allow_html=True)
     
-    For now, you can:
-    - Try our **Chat** feature for quick quotes
-    - Explore our **Advanced Chat** for deeper conversations
-    - Learn more about us in the **About** section
-    """)
+    # Add call to action with better navigation
+    st.markdown("### Ready to get started?")
     
-    # Add some interactive elements
-    if st.button("Get Started"):
-        st.markdown("Navigate to the **Chat** section using the sidebar to begin your journey! ➡️")
-
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Try Chat Bot", use_container_width=True):
+            st.session_state['navigation'] = "Chat"
+            st.rerun()  # Using st.rerun instead of experimental_rerun
+    with col2:
+        if st.button("Learn More", use_container_width=True):
+            st.session_state['navigation'] = "About"
+            st.rerun()  # Using st.rerun instead of experimental_rerun
