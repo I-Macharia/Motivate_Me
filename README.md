@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # my-streamlit-app/README.md
 
 # My Streamlit App
@@ -68,3 +69,7 @@ my-streamlit-app
 ## Overview
 
 This application aims to provide users with motivational quotes and an engaging chatbot experience. The advanced chatbot leverages state-of-the-art AI models to enhance user interactions and provide meaningful responses.
+=======
+# Motivate_Me
+🚀 Motivate Me – Your daily dose of inspiration, powered by words that move you.  💡 Bringing uplifting quotes, personal growth insights, and motivation straight to your feed.  🔗 Follow along as we build a platform that fuels ambition, positivity, and unstoppable momentum.  Stay inspired. Stay relentless. #MotivateMe
+>>>>>>> 3a2ccbec36e06559f83d5eb66586a3a830a12cc3
