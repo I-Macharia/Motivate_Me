@@ -179,11 +179,11 @@ This project is licensed under the Creative Commons Zero v1.0 Universal - see th
 
 ## 📬 Contact
 
-- **Email**: contact@motivateme.com
-- **GitHub**: [github.com/yourusername/Motivate_Me](https://github.com/yourusername/Motivate_Me)
+- [![Follow me on X](https://img.shields.io/badge/X-Follow%20Me-blue?logo=x)](https://x.com/Enigmaticbobman)
+- **GitHub**: [github.com/I-Macharia/Motivate_Me](https://github.com/I-Macharia/Motivate_Me)
 
 ---
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by [Macharia]
 
 > 🚀 *"The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle."* - Steve Jobs
