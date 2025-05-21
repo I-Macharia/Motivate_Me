@@ -1,11 +1,10 @@
 import requests
 import pandas as pd
 import numpy as np
-# import seaborn as sns
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from nltk import FreqDist
-# import plotly.express as px
+import os
 
 import zipfile
 import pickle
@@ -13,128 +12,141 @@ import string
 import gzip
 import spacy
 
-# from sklearn.metrics.pairwise import cosine_similarity, linear_kernel
-# from sklearn.cluster import KMeans
-# from sklearn.neighbors import NearestNeighbors
-# from sklearn.metrics import mean_squared_error, accuracy_score
-# from sklearn.model_selection import cross_val_score, GridSearchCV, train_test_split
-# from sklearn.neighbors import  KNeighborsRegressor
-# from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
-# from sklearn.metrics.pairwise import cosine_similarity
-# from sklearn.utils import resample
 from sklearn.svm import SVC
 
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
 
 import streamlit as st
 
-# Commented out after installation
-# # Download the model using spacy.cli.download
-# spacy.cli.download("en_core_web_sm")
+# Initialize lemmatizer and stop words
+lemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words('english'))
 
-# nltk.download("punkt")
-# nltk.download("stopwords")
+# Import everything needed for the application to work
+try:
+    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('corpora/stopwords')
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('punkt')
+    nltk.download('stopwords')
+    nltk.download('wordnet')
+
+# Load spaCy model
+try:
+    nlp = spacy.load('en_core_web_sm')
+except OSError:
+    # For deployment, we'll handle the error and provide guidance
+    pass
 
 
 def translate_to_english(text):
     """
-Translates the given text to English if it is not already in English.
-
-Args:
-    text (str): The text to be translated.
-
-Returns:
-    str: The translated text in English, or the original text if it is already in English.
-
-Example:
-    ```python
-    translated_text = translate_to_english("Bonjour")
-    print(translated_text)  # Output: "Hello"
-    ```
-"""
-    try:
-        # Detect the language of the text
-        lang = detect(text)
-        
-        if lang == 'en':
-            return text
-        
-        translator = Translator()
-        translation = translator.translate(text, src=lang, dest='en')
-        
-        return translation.text if translation else text
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return text
-
+    Translates the given text to English if it is not already in English.
     
+    Note: This function is a placeholder since we've removed external dependencies.
+    In a real application, you would need to install and import language detection and 
+    translation libraries.
+
+    Args:
+        text (str): The text to be translated.
+
+    Returns:
+        str: The original text (translation functionality removed for simplicity).
+    """
+    # We're removing the actual translation functionality to eliminate dependencies
+    return text
+
 
 def preprocess_text(text):
     """
-Preprocesses the given text by converting it to lowercase, tokenizing it, removing stopwords, and joining the tokens back into text.
+    Preprocesses the given text by converting it to lowercase, tokenizing it, 
+    removing stopwords, and joining the tokens back into text.
 
-Args:
-    text (str): The text to be preprocessed.
+    Args:
+        text (str): The text to be preprocessed.
 
-Returns:
-    str: The preprocessed text.
-
-Example:
-    ```python
-    preprocessed_text = preprocess_text("This is a sample text.")
-    print(preprocessed_text)  # Output: "sample text"
-    ```
-"""
-
+    Returns:
+        tuple: A tuple containing the preprocessed text and the list of words.
+    """
+    if not isinstance(text, str):
+        text = str(text)
+        
     # Lowercase
     text = text.lower()
+    
     # Tokenization
     tokens = word_tokenize(text)
+    
     # Remove stopwords
-    tokens = [word for word in tokens if word not in stopwords.words('english')]
+    tokens = [word for word in tokens if word not in stop_words]
 
-     # Tokenize
+    # Tokenize again for words list
     words = nltk.word_tokenize(text.lower())
     
     # Remove stopwords and punctuation
     words = [word for word in words if word.isalpha() and word not in stop_words]
+    
     # Lemmatize
     words = [lemmatizer.lemmatize(word) for word in words]
-    # Join tokens back into text 
     
+    # Join tokens back into text 
     return ' '.join(tokens), words
 
 
 def compress_tags(tags_list):
+    """
+    Compresses a list of tags to only unique values with a maximum of 5.
+    
+    Args:
+        tags_list (list): List of tags to compress.
+        
+    Returns:
+        list: Compressed list with unique tags (max 5).
+    """
     return list(set(tags_list))[:5]
+
 
 def preprocesss_text(text):
     """
-    Preprocesses the given text by converting it to lowercase, tokenizing it, removing stopwords, and joining the tokens back into text.
+    Preprocesses text by converting to lowercase, tokenizing, removing stopwords.
     
-    Parameters:
-    - text (str): The input text.
+    Args:
+        text (str): The input text.
     
     Returns:
-    - str: The preprocessed text.
+        str: The preprocessed text.
     """
     if isinstance(text, float):
         # Return an empty string for float values
         return ''
+        
     # Lowercase
     text = text.lower()
+    
     # Tokenization
     tokens = word_tokenize(text)
+    
     # Remove stopwords
-    stop_words = set(stopwords.words('english'))
     tokens = [word for word in tokens if word.isalnum() and word not in stop_words]
+    
     return ' '.join(tokens)
 
-# Simple text cleaning process
+
 def clean_text(text):
+    """
+    Performs basic text cleaning.
+    
+    Args:
+        text (str): The text to clean.
+        
+    Returns:
+        str: Cleaned text.
+    """
     if isinstance(text, str):
         # Convert to lowercase
         text = text.lower()
@@ -146,6 +158,16 @@ def clean_text(text):
 
 
 def aggregate_statistics(polarity_scores, subjectivity_scores):
+    """
+    Calculate aggregate statistics for polarity and subjectivity scores.
+    
+    Args:
+        polarity_scores (list): List of polarity scores.
+        subjectivity_scores (list): List of subjectivity scores.
+        
+    Returns:
+        dict: Dictionary of calculated statistics.
+    """
     polarity_mean = np.mean(polarity_scores)
     polarity_median = np.median(polarity_scores)
     polarity_std = np.std(polarity_scores)
@@ -172,25 +194,47 @@ def aggregate_statistics(polarity_scores, subjectivity_scores):
 
     return stats
 
+
 def plot_histograms(polarity_scores, subjectivity_scores):
-    plt.figure(figsize=(12, 6))
+    """
+    Plot histograms for polarity and subjectivity scores.
+    
+    Note: This function has been modified to work without seaborn.
+    
+    Args:
+        polarity_scores (list): List of polarity scores.
+        subjectivity_scores (list): List of subjectivity scores.
+    """
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
 
-    plt.subplot(1, 2, 1)
-    sns.histplot(polarity_scores, bins=10, kde=True, color='skyblue', edgecolor='black')
-    plt.title('Distribution of Polarity Scores')
-    plt.xlabel('Polarity')
-    plt.ylabel('Frequency')
+    # Plot histogram for polarity scores
+    ax1.hist(polarity_scores, bins=10, color='skyblue', edgecolor='black')
+    ax1.set_title('Distribution of Polarity Scores')
+    ax1.set_xlabel('Polarity')
+    ax1.set_ylabel('Frequency')
 
-    plt.subplot(1, 2, 2)
-    sns.histplot(subjectivity_scores, bins=10, kde=True, color='salmon', edgecolor='black')
-    plt.title('Distribution of Subjectivity Scores')
-    plt.xlabel('Subjectivity')
-    plt.ylabel('Frequency')
+    # Plot histogram for subjectivity scores
+    ax2.hist(subjectivity_scores, bins=10, color='salmon', edgecolor='black')
+    ax2.set_title('Distribution of Subjectivity Scores')
+    ax2.set_xlabel('Subjectivity')
+    ax2.set_ylabel('Frequency')
 
     plt.tight_layout()
-    st.pyplot(plt)
+    st.pyplot(fig)
+
 
 def sentiment_categories(polarity_scores, positive_threshold=0.2, negative_threshold=-0.2):
+    """
+    Categorize sentiment based on polarity scores.
+    
+    Args:
+        polarity_scores (list): List of polarity scores.
+        positive_threshold (float, optional): Threshold for positive sentiment. Defaults to 0.2.
+        negative_threshold (float, optional): Threshold for negative sentiment. Defaults to -0.2.
+        
+    Returns:
+        dict: Dictionary with counts of positive, neutral, and negative quotes.
+    """
     positive_quotes = sum(p > positive_threshold for p in polarity_scores)
     neutral_quotes = sum(
         -positive_threshold <= p <= positive_threshold for p in polarity_scores
@@ -210,7 +254,17 @@ def sentiment_categories(polarity_scores, positive_threshold=0.2, negative_thres
 
     return categories
 
+
 def correlation_analysis(polarity_scores):
+    """
+    Perform correlation analysis between polarity scores and random quote lengths.
+    
+    Args:
+        polarity_scores (list): List of polarity scores.
+        
+    Returns:
+        float: Correlation coefficient.
+    """
     quote_lengths = np.random.randint(10, 200, size=len(polarity_scores))
     correlation = np.corrcoef(polarity_scores, quote_lengths)[0, 1]
 
@@ -219,37 +273,55 @@ def correlation_analysis(polarity_scores):
 
     return correlation
 
-# Function to save results to a pickle file
+
 def save_results(filename, results):
+    """
+    Save results to a pickle file.
+    
+    Args:
+        filename (str): Path to save the file.
+        results (object): Object to save.
+    """
     with open(filename, 'wb') as f:
         pickle.dump(results, f, protocol=pickle.HIGHEST_PROTOCOL)
 
-# Function to load results from a pickle file
+
 def load_results(filename):
+    """
+    Load results from a pickle file.
+    
+    Args:
+        filename (str): Path to the file.
+        
+    Returns:
+        object: Loaded object.
+    """
     with open(filename, 'rb') as f:
         return pickle.load(f)
 
+
 class QuoteFinder:
-    """A class for finding quotes in text data and training a model for quote prediction.
+    """
+    A class for finding quotes in text data and training a model for quote prediction.
 
-Methods:
-- train_model: Trains a Support Vector Machine model on the quotes data.
-- clean_text: Cleans and preprocesses text data.
-- find_quote_for_tweet: Predicts a quote and author for a given tweet.
-- save: Serialize and compress the model, vectorizer, and data.
-- load: Decompress and deserialize the model, vectorizer, and data.
+    Methods:
+    - train_model: Trains a Support Vector Machine model on the quotes data.
+    - clean_text: Cleans and preprocesses text data.
+    - find_quote_for_tweet: Predicts a quote and author for a given tweet.
+    - save: Serialize and compress the model, vectorizer, and data.
+    - load: Decompress and deserialize the model, vectorizer, and data.
 
-Raises:
-    ValueError: If quotes DataFrame is not set.
-"""
-    @classmethod
-    def load(cls, vectorizer_filepath, model_filepath, quotes_filepath):
-        # Validate paths
-        for filepath in [vectorizer_filepath, model_filepath, quotes_filepath]:
-            if not os.path.exists(filepath):
-                raise FileNotFoundError(f"File not found: {filepath}")
-            
+    Raises:
+        ValueError: If quotes DataFrame is not set.
+    """
+    
     def __init__(self, quotes_df=None):
+        """
+        Initialize the QuoteFinder with a DataFrame of quotes.
+        
+        Args:
+            quotes_df (DataFrame, optional): DataFrame with quotes and authors. Defaults to None.
+        """
         self.quotes_df = quotes_df
         self.vectorizer = None
         self.svm_model = None
@@ -258,6 +330,12 @@ Raises:
             self.quotes_df['combined'] = self.quotes_df['quote_2'] + " " + self.quotes_df['author_2']
 
     def train_model(self):
+        """
+        Train the SVM model on the quotes data.
+        
+        Raises:
+            ValueError: If quotes DataFrame is not set.
+        """
         if self.quotes_df is None:
             raise ValueError("Quotes DataFrame is not set.")
         
@@ -270,12 +348,30 @@ Raises:
         self.svm_model.fit(X, y)
 
     def clean_text(self, text):
+        """
+        Clean and preprocess text.
+        
+        Args:
+            text (str): The text to clean.
+            
+        Returns:
+            str: Cleaned text.
+        """
         text = text.lower()
         tokens = word_tokenize(text)
         tokens = [word for word in tokens if word.isalnum() and word not in stopwords.words('english')]
         return ' '.join(tokens)
 
     def find_quote_for_tweet(self, tweet):
+        """
+        Find a relevant quote and author for a given tweet.
+        
+        Args:
+            tweet (str): The tweet or user input.
+            
+        Returns:
+            tuple: A tuple containing the quote and author.
+        """
         cleaned_tweet = self.clean_text(tweet)
         vectorized_tweet = self.vectorizer.transform([cleaned_tweet])
 
@@ -292,8 +388,20 @@ Raises:
             print(f"An error occurred: {e}")
             return "An error occurred.", "Unknown"
 
-    # Serialize and compress data
     def save(self, vectorizer_filepath, model_filepath, dataframe_filepath):
+        """
+        Serialize and compress the model, vectorizer, and data.
+        
+        Args:
+            vectorizer_filepath (str): Path to save the vectorizer.
+            model_filepath (str): Path to save the model.
+            dataframe_filepath (str): Path to save the DataFrame.
+        """
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(vectorizer_filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(model_filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(dataframe_filepath), exist_ok=True)
+        
         with gzip.open(vectorizer_filepath, 'wb') as file:
             pickle.dump(self.vectorizer, file, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -303,20 +411,41 @@ Raises:
         with gzip.open(dataframe_filepath, 'wb') as file:
             pickle.dump(self.quotes_df, file, protocol=pickle.HIGHEST_PROTOCOL)
             
-    # Decompress and deserialize data
     @classmethod
     def load(cls, vectorizer_filepath, model_filepath, dataframe_filepath):
-        with gzip.open(vectorizer_filepath, 'rb') as file:
-            vectorizer = pickle.load(file)
+        """
+        Decompress and deserialize the model, vectorizer, and data.
+        
+        Args:
+            vectorizer_filepath (str): Path to the vectorizer file.
+            model_filepath (str): Path to the model file.
+            dataframe_filepath (str): Path to the DataFrame file.
+            
+        Returns:
+            QuoteFinder: An instance of QuoteFinder with loaded components.
+            
+        Raises:
+            FileNotFoundError: If any of the files don't exist.
+        """
+        # Validate paths
+        for filepath in [vectorizer_filepath, model_filepath, dataframe_filepath]:
+            if not os.path.exists(filepath):
+                raise FileNotFoundError(f"File not found: {filepath}")
+        
+        try:
+            with gzip.open(vectorizer_filepath, 'rb') as file:
+                vectorizer = pickle.load(file)
 
-        with gzip.open(model_filepath, 'rb') as file:
-            svm_model = pickle.load(file)
+            with gzip.open(model_filepath, 'rb') as file:
+                svm_model = pickle.load(file)
 
-        with gzip.open(dataframe_filepath, 'rb') as file:
-            quotes_df = pickle.load(file)
+            with gzip.open(dataframe_filepath, 'rb') as file:
+                quotes_df = pickle.load(file)
 
-        instance = cls(quotes_df)
-        instance.vectorizer = vectorizer
-        instance.svm_model = svm_model
+            instance = cls(quotes_df)
+            instance.vectorizer = vectorizer
+            instance.svm_model = svm_model
 
-        return instance
+            return instance
+        except Exception as e:
+            raise Exception(f"Error loading model components: {e}")

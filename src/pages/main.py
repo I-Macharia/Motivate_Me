@@ -30,15 +30,16 @@ def main_page():
         </div>
     """, unsafe_allow_html=True)
     
-    # Add call to action with better navigation
+    # Add call to action buttons
     st.markdown("### Ready to get started?")
     
-    col1, col2 = st.columns(2)
+    # Create two columns for buttons
+    col1, col2 = st.columns([1, 1])
     with col1:
-        if st.button("Try Chat Bot", use_container_width=True):
-            st.session_state['navigation'] = "Chat"
-            st.rerun()  # Using st.rerun instead of experimental_rerun
+        if st.button("💬 Start Chatting", key="start_chat", use_container_width=True):
+            st.session_state["nav_target"] = "Chat"
+            # st.rerun()
     with col2:
-        if st.button("Learn More", use_container_width=True):
-            st.session_state['navigation'] = "About"
-            st.rerun()  # Using st.rerun instead of experimental_rerun
+        if st.button("🔍 Learn More", key="learn_more", use_container_width=True):
+            st.session_state["nav_target"] = "About"
+            # st.rerun()

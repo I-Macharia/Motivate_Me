@@ -27,10 +27,10 @@ def about_page():
     ## Contact Us
     
     Have questions or suggestions? Reach out to us:
-    - Email: [contact@motivateme.com](mailto:contact@motivateme.com)
+    - X: [contact@motivateme.com](mailto:contact@motivateme.com)
     - GitHub: [Motivate_Me Repository](https://github.com/I-Macharia/Motivate_Me)
     """)
     
     # Add version information
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("v1.0.0")
+    # st.sidebar.markdown("---")
+    # st.sidebar.markdown("v1.0.0")

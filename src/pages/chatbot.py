@@ -37,9 +37,9 @@ def chatbot_page():
         try:
             quote, author = quote_finder.find_quote_for_tweet(user_input)
             
-            # Add to chat history
-            st.session_state.chat_history.append({"user": user_input})
-            st.session_state.chat_history.append({
+            # Add to chat history (new quote at the top)
+            st.session_state.chat_history.insert(0, {"user": user_input})
+            st.session_state.chat_history.insert(0, {
                 "bot": f"Here's a quote that resonates with your message:\n\n\"{quote}\"\n- {author}"
             })
 
