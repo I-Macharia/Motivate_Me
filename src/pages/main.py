@@ -43,3 +43,7 @@ def main_page():
         if st.button("🔍 Learn More", key="learn_more", use_container_width=True):
             st.session_state["nav_target"] = "About"
             # st.rerun()
+
+
+if __name__ == "__main__":
+    main_page()

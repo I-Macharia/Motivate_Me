@@ -34,3 +34,6 @@ def about_page():
     # Add version information
     # st.sidebar.markdown("---")
     # st.sidebar.markdown("v1.0.0")
+    
+    if __name__ == "__main__":
+        about_page()

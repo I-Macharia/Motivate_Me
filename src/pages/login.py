@@ -1,5 +1,7 @@
 import streamlit as st
 from utils.db_utils import verify_user, create_user
+from utils.civic_pass_utils import check_civic_pass_validity
+
 
 def login_page():
     st.title("Welcome to Motivate Me! 🚀")
@@ -13,21 +15,24 @@ def login_page():
         with tab1:
             st.subheader("Login")
             username = st.text_input("Username", key="login_username")
-            password = st.text_input("Password", type="password", key="login_password")
+            password = st.text_input(
+                "Password", type="password", key="login_password")
+            civic_pass = st.text_input("Civic Pass", key="civic_pass")
 
             if st.button("Login"):
-                if user_id := verify_user(username, password):
-                    st.session_state.user_id = user_id
+                if verify_user(username, password) or check_civic_pass_validity(civic_pass):
+                    st.session_state.user_id = username  # or user_id from Civic Pass
                     st.session_state.username = username
                     st.success("Login successful!")
                     st.rerun()
                 else:
-                    st.error("Invalid username or password")
+                    st.error("Invalid username, password, or Civic Pass")
 
         with tab2:
             st.subheader("Sign Up")
             new_username = st.text_input("Username", key="signup_username")
-            new_password = st.text_input("Password", type="password", key="signup_password")
+            new_password = st.text_input(
+                "Password", type="password", key="signup_password")
             email = st.text_input("Email")
 
             if st.button("Sign Up"):
@@ -37,3 +42,7 @@ def login_page():
                     st.error("Username or email already exists")
 
     return st.session_state.user_id is not None
+
+
+if __name__ == "__main__":
+    login_page()

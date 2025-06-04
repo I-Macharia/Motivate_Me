@@ -102,3 +102,5 @@ def get_user_chat_history(user_id: int) -> list:
         return cursor.fetchall()
     finally:
         conn.close()
+        
+        

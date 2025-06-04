@@ -3,6 +3,7 @@ from pages.about import about_page
 from pages.chatbot import chatbot_page
 from pages.main import main_page
 from pages.rag_chatbot import rag_chatbot_page
+from pages.profile import profile_page
 from utils.db_utils import init_db
 
 # Initialize database
@@ -38,23 +39,23 @@ st.set_page_config(
 #     </style>
 #     """, unsafe_allow_html=True)
 
-# Sidebar configuration
-with st.sidebar:
-    st.title("Navigation 🧭")
+# # Sidebar configuration
+# with st.sidebar:
+#     st.title("Navigation 🧭")
     
-    # Navigation options
-    selection = st.radio(
-        "Choose a page",
-        options=["Home", "Chat", "Advanced Chat", "About"],
-        label_visibility="collapsed",
-        key="navigation"
-    )
+#     # Navigation options
+#     selection = st.radio(
+#         "Choose a page",
+#         options=["Home", "Chat", "Advanced Chat", "About"],
+#         label_visibility="collapsed",
+#         key="navigation"
+#     )
     
-    st.markdown("---")
+    # st.markdown("---")
     # st.markdown("v1.0.0")
-    st.markdown("Made with ❤️ by Bobby")
+    # st.markdown("Made with ❤️ by Bobby")
 
-# --- Navigation fix ---
+# # --- Navigation fix ---
 # if "nav_target" in st.session_state:
 #     selection = st.session_state.pop("nav_target")
 
@@ -63,8 +64,12 @@ pages = {
     "Home": main_page,
     "Chat": chatbot_page,
     "Advanced Chat": rag_chatbot_page,
-    "About": about_page
+    "About": about_page,
+    "Profile": profile_page
 }
-
-# Display selected page
-pages[selection]()
+# # Display selected page
+# pages[selection]()
+if "nav_target" in st.session_state:
+    pages[st.session_state["nav_target"]]()
+else:
+    pages["Home"]()

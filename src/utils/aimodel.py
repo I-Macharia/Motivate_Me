@@ -7,7 +7,7 @@ class RAGQuoteAgent:
     def __init__(self, quotes_csv_path, embedding_model_name="all-MiniLM-L6-v2", llm_model_name="mistralai/Mistral-7B-Instruct-v0.2"):
         # Load quotes
         self.quotes_df = pd.read_csv(quotes_csv_path)
-        self.texts = self.quotes_df["Quote"].tolist()
+        self.texts = self.quotes_df["quote_2"].tolist()
         # Load embedding model
         self.embedder = SentenceTransformer(embedding_model_name)
         # Compute or load embeddings
