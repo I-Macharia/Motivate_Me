@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.civic_pass_utils import get_civic_pass_status
+from utils.data_utils import fetch_user_details_from_nextjs
 
 def profile_page():
     st.title("User Profile")
@@ -9,13 +9,20 @@ def profile_page():
         return
 
     username = st.session_state.username
-    st.subheader(f"Welcome, {username}!")
+    user_details = fetch_user_details_from_nextjs(username)
 
-    civic_pass_status = get_civic_pass_status(st.session_state.user_id)
-    if civic_pass_status:
-        st.success("Your Civic Pass is active!")
+    if user_details:
+        st.subheader(f"Welcome, {username}!")
+        civic_pass_status = user_details.get("civic_pass_id")
+        ipfs_link = user_details.get("ipfs_hash")
+
+        if civic_pass_status:
+            st.success("Your Civic Pass is active!")
+            st.markdown(f"[View Civic Pass Metadata on IPFS](https://ipfs.io/ipfs/{ipfs_link})")
+        else:
+            st.warning("Your Civic Pass is not active. Please issue a new one.")
     else:
-        st.warning("Your Civic Pass is not active. Please issue a new one.")
+        st.error("Failed to fetch user details.")
 
-if __name__ == "__main__":
+if __name__ == "__profile__":
     profile_page()

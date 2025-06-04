@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@civic/ethereum-gateway-react": "^1.4.7",
+    "ethers": "^6.14.3"
+  }
+}

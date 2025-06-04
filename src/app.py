@@ -61,10 +61,10 @@ st.set_page_config(
 
 # Page mapping
 pages = {
+    "About": about_page,
     "Home": main_page,
     "Chat": chatbot_page,
     "Advanced Chat": rag_chatbot_page,
-    "About": about_page,
     "Profile": profile_page
 }
 # # Display selected page

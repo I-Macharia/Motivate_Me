@@ -35,5 +35,5 @@ def about_page():
     # st.sidebar.markdown("---")
     # st.sidebar.markdown("v1.0.0")
     
-    if __name__ == "__main__":
+    if __name__ == "__about__":
         about_page()

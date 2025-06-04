@@ -21,5 +21,5 @@ def rag_chatbot_page():
         st.write("Retrieved Quotes:", quotes)
         
         
-if __name__ == "__main__":
+if __name__ == "__rag_chatbot__":
     rag_chatbot_page()

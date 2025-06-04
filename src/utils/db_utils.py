@@ -16,8 +16,10 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL,
+            civic_pass_id TEXT UNIQUE,
             email TEXT UNIQUE NOT NULL,
+            ipfs_hash TEXT,
+            password_hash TEXT NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -25,12 +27,12 @@ def init_db():
     # Create chat_history table
     c.execute('''
         CREATE TABLE IF NOT EXISTS chat_history (
-            chat_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
+            message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
             message_type TEXT NOT NULL,
             message_content TEXT NOT NULL,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users (user_id)
+            FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
         )
     ''')
     
@@ -61,6 +63,28 @@ def create_user(username: str, password: str, email: str) -> bool:
         return False
     finally:
         conn.close()
+
+def get_user_details(username: str) -> dict:
+    """Fetch user details from the database"""
+    db_path = Path('src/data/motivate_me.db')
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    
+    c.execute('SELECT * FROM users WHERE username = ?', (username,))
+    user = c.fetchone()
+    conn.close()
+    
+    if user:
+        return {
+            "user_id": user[0],
+            "username": user[1],
+            "civic_pass_id": user[2],
+            "email": user[3],
+            "ipfs_hash": user[4],
+            "created_at": user[5],
+        }
+    return None
+
 
 def verify_user(username: str, password: str) -> int:
     """Verify user credentials and return user_id if valid"""
@@ -102,5 +126,5 @@ def get_user_chat_history(user_id: int) -> list:
         return cursor.fetchall()
     finally:
         conn.close()
-        
-        
+
+
