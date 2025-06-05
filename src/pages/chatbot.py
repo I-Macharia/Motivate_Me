@@ -62,5 +62,6 @@ def chatbot_page():
         st.session_state.chat_history = []
         st.experimental_rerun()
 
-if __name__ == "__main__":
-    chatbot_page()
+
+# if __name__ == "__chatbot_page__":
+#     chatbot_page()

@@ -1,8 +1,14 @@
+# from src.pages.login import login_page
 import streamlit as st
-from .pages.login import login_page
-from .pages.profile import profile_page
-from .pages.chatbot import chatbot_page
-from .pages.rag_chatbot import rag_chatbot_page
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from pages.login import login_page
+from pages.profile import profile_page
+from pages.chatbot import chatbot_page
+from pages.rag_chatbot import rag_chatbot_page
 # from .pages.about import about_page
 
 def main():

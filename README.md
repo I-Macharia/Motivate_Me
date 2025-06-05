@@ -92,6 +92,25 @@ my-streamlit-app/
 └── README.md                 # Project documentation
 ```
 
+## 🔒 Civic Pass Integration
+
+Motivate Me now supports Civic Pass authentication for enhanced security and user verification. This integration enables:
+
+- **Secure Login**: Users can authenticate using Civic Pass.
+- **Profile Management**: Seamless user profile updates and management.
+- **Streamlit Compatibility**: Civic Pass APIs are fully integrated with the Streamlit app.
+
+### How to Use Civic Pass Authentication
+
+1. **Next.js App**:
+   - Navigate to the login page (`/login`).
+   - Authenticate using Civic Pass.
+   - Your profile will be updated automatically.
+
+2. **Streamlit App**:
+   - Civic Pass authentication is integrated into the dashboard and profile pages.
+   - Ensure the Streamlit app is running and connected to the Next.js API endpoints.
+
 ## 🚀 Installation
 
 
@@ -208,5 +227,18 @@ Have questions or want to connect? Reach out to me on X!
 Made with ❤️ by [Macharia]
 
 > 🚀 *"The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle."* - Steve Jobs
-```
+
+## 🚀 Next Steps
+
+1. **Database Migration**:
+   - Replace SQLite with PostgreSQL or MongoDB for production readiness.
+
+2. **Enhanced Security**:
+   - Implement JWT authentication and session management.
+
+3. **UI Improvements**:
+   - Enhance styling and interactivity in both Streamlit and Next.js apps.
+
+4. **Error Handling**:
+   - Add comprehensive error logging and user feedback mechanisms.
 
