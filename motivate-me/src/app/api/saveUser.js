@@ -10,7 +10,8 @@ export default async function handler(req, res) {
       const ipfsHash = await uploadToIPFS({ username, civicPassId, email });
 
       const db = await open({
-        filename: "./src/data/motivate_me.db",
+        filename: "../../data/motivate_me.db", // Adjust the path as necessary
+          // "./src/data/motivate_me.db",
         driver: sqlite3.Database,
       });
 
@@ -20,7 +21,7 @@ export default async function handler(req, res) {
       );
 
       res.status(200).json({ message: "User saved successfully!", ipfsHash });
-    } catch (error) {
+    } catch {
       res.status(500).json({ error: "Failed to save user." });
     }
   } else {

@@ -21,7 +21,7 @@ export default function Login() {
 
       const data = await response.json();
       setStatus(data.message || "Civic Pass issued successfully!");
-    } catch (error) {
+    } catch {
       setStatus("Failed to issue Civic Pass.");
     }
   };

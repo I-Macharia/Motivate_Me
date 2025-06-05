@@ -3,7 +3,7 @@ import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   const wallet = {
-    address: "0xYourWalletAddress", // Replace with the user's wallet address
+    address: WALLET_ADDRESS, // Replace with the user's wallet address
     signer: null, // Replace with an ethers.js signer instance
   };
 
