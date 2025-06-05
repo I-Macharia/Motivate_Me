@@ -9,9 +9,7 @@ def profile_page():
         return
 
     username = st.session_state.username
-    user_details = fetch_user_details_from_nextjs(username)
-
-    if user_details:
+    if user_details := fetch_user_details_from_nextjs(username):
         st.subheader(f"Welcome, {username}!")
         civic_pass_status = user_details.get("civic_pass_id")
         ipfs_link = user_details.get("ipfs_hash")
